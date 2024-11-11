@@ -23,12 +23,12 @@ d3.csv("dataset.csv").then(function(dataset) {
         return entry;
     }).sort((a, b) => a.Age - b.Age);;
 
-    const maxParticipants = d3.max(formattedData, d => d.No + d.Vigorous);
+    var maxParticipants = d3.max(formattedData, d => d.No + d.Vigorous);
     console.log(maxParticipants)
     // Dimensions
     const dimensions = {
         width: 1200,
-        height: 500,
+        height: 400,
         margin: { top: 10, right: 10, bottom: 50, left: 160 }
     };
 
@@ -37,24 +37,24 @@ d3.csv("dataset.csv").then(function(dataset) {
         .style("width", dimensions.width)
         .style("height", dimensions.height)
         
-    const xScale = d3.scaleBand()
+    var xScale = d3.scaleBand()
         .domain(formattedData.map(d => d.Age))
         .range([0, dimensions.width - dimensions.margin.left - dimensions.margin.right])
         .padding(0.1);
 
-    const yScale = d3.scaleLinear()
+    var yScale = d3.scaleLinear()
         .domain([0, maxParticipants+10]) // y-axis based on the maximum total count for each age
         .range([dimensions.height - dimensions.margin.bottom, 0]);
 
-    const colorScale = d3.scaleOrdinal()
+    var colorScale = d3.scaleOrdinal()
         .domain(["No", "Vigorous"])
         .range(["#377eb8", "#ff7f00"]); // Colors for "No" and "Vigorous" exercise levels
 
     // Define the stack generator
-    const stackGenerator = d3.stack()
+    var stackGenerator = d3.stack()
         .keys(["No", "Vigorous"]);
 
-    const layers = stackGenerator(formattedData);
+    var layers = stackGenerator(formattedData);
 
     svg.append("g")
     .attr("transform", `translate(0, ${dimensions.height - dimensions.margin.bottom})`)
@@ -67,11 +67,11 @@ d3.csv("dataset.csv").then(function(dataset) {
     .text("Age");
 
     // Add y-axis with explicit styling to ensure visibility
-    svg.append("g")
-        .call(d3.axisLeft(yScale).tickSize(-dimensions.width + dimensions.margin.left + dimensions.margin.right))
-        .selectAll("text")
-        .style("fill", "black") // Ensure text color is set to visible
-        .style("font-size", "12px");
+    // svg.append("g")
+    //     .call(d3.axisLeft(yScale).tickSize(-dimensions.width + dimensions.margin.left + dimensions.margin.right))
+    //     .selectAll("text")
+    //     .style("fill", "black") // Ensure text color is set to visible
+    //     .style("font-size", "12px");
 
     // Add y-axis label
     svg.select("g")
@@ -118,7 +118,7 @@ d3.csv("dataset.csv").then(function(dataset) {
         .enter()
         .append("g")
         .attr("class", "legend")
-        .attr("transform", (d, i) => `translate(${dimensions.width - dimensions.margin.right - 100}, ${i * 20})`);
+        .attr("transform", (d, i) => `translate(${dimensions.width - 100}, ${i * 20 + 20})`);
 
     legend.append("rect")
         .attr("x", -20)
